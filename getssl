@@ -171,7 +171,6 @@
 # 2016-12-27 update checks to work with openssl in FIPS mode (1.93)
 # 2016-12-28 fix leftover tmpfiles in upgrade routine (1.94)
 # 2016-12-28 tidied up upgrade tmpfile handling (1.95)
-# 2016-12-29 modified parameter parsing to catch null domain (1.96)
 # ----------------------------------------------------------------------------------------
 
 PROGNAME=${0##*/}
@@ -1153,7 +1152,7 @@ trap "signal_exit TERM" TERM HUP
 trap "signal_exit INT"  INT
 
 # Parse command-line
-while [[ $# -gt 0 ]]; do
+while [[ -n $1 ]]; do
   case $1 in
     -h | --help)
       help_message; graceful_exit ;;
@@ -1187,9 +1186,6 @@ while [[ $# -gt 0 ]]; do
     -* | --*)
       usage
       error_exit "Unknown option $1" ;;
-    "")
-	usage
-	error_exit "null domain" ;;
     *)
       DOMAIN="$1" ;;
   esac
