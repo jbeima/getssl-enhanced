@@ -32,10 +32,10 @@ If you use puppet, there is a [GetSSL Puppet module](https://github.com/dthielki
 GetSSL was written in standard bash ( so it can be run on a server,  a desktop computer, or even a virtualbox) and add the checks, and certificates to a remote server ( providing you have a ssh with key, sftp or ftp access to the remote server).
 
 ```
-getssl ver. 1.81
+getssl ver. 2.01
 Obtain SSL certificates from the letsencrypt.org ACME server
 
-Usage: getssl [-h|--help] [-d|--debug] [-c|--create] [-f|--force] [-a|--all] [-q|--quiet] [-Q|--mute] [-u|--upgrade] [-U|--nocheck] [-r|--revoke cert key] [-w working_dir] domain
+Usage: getssl [-h|--help] [-d|--debug] [-c|--create] [-f|--force] [-a|--all] [-q|--quiet] [-Q|--mute] [-u|--upgrade] [-k|--keep #] [-U|--nocheck] [-r|--revoke cert key] [-w working_dir] domain
 
 Options:
   -a, --all       Check all certificates
@@ -47,6 +47,7 @@ Options:
   -Q, --mute      Like -q, but mutes notification about successful upgrade
   -r, --revoke cert key  [CA_server] Revoke a certificate (the cert and key are required)
   -u, --upgrade   Upgrade getssl if a more recent version is available
+  -k, --keep #    Maximum amount of old getssl versions to keep when upgrading
   -U, --nocheck   Do not check if a more recent version is available
   -w working_dir  Working directory
 ```
@@ -228,9 +229,10 @@ these are available in getssl to check if the certificate is installed correctly
 
 In general revoking a certificate is not required.
 
-usage: getssl -r path/to/cert path/to/key
+usage: getssl -r path/to/cert path/to/key [CA_server]
 
-You need to specify both the certificate you want to revoke, and the account or private domain key which was used to sign / obtain the original key.
+You need to specify both the certificate you want to revoke, and the account or private domain key which was used to sign / obtain the original certificate.  The CA_server is an optional parameter and defaults to Let's Encrypt ( "https://acme-v01.api.letsencrypt.org" ) as that is currently the only Certificate Authority using the ACME protocol.
+
 
 ##Elliptic curve keys
 You can use Elliptic curve keys for both the account key and the domain key (different of course, don't use the same key for both). prime256v1 (NIST P-256) and secp384r1 (NIST P-384) are both fully supported.  secp521r1 (NIST P-521) is included in the code, but not currently supported by Let's Encrypt).
